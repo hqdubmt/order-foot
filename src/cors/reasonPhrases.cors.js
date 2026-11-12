@@ -1,6 +1,7 @@
 
 const reasonPhrasesUtils = require('../utils/reasonPhrases.utils');
 const statusCodesUtils = require('../utils/statusCodes.utils');
+const codeCustom = require('../utils/codeCustom.util');
 
 class ErrorReasonPhrases extends Error {
   constructor(message, status, code, details = null) {
@@ -22,6 +23,17 @@ class BadRequestError extends ErrorReasonPhrases {
       message,
       statusCodesUtils.BAD_REQUEST,
       'BAD_REQUEST',
+      details
+    );
+  }
+}
+
+class ValidationError extends ErrorReasonPhrases {
+  constructor(message = codeCustom.VALIDATION_ERROR.message, details = null) {
+    super(
+      message,
+      codeCustom.VALIDATION_ERROR.status,
+      'VALIDATION_ERROR',
       details
     );
   }
@@ -63,6 +75,7 @@ class InternalServerError extends ErrorReasonPhrases {
 module.exports = {
   ErrorReasonPhrases,
   BadRequestError,
+  ValidationError,
   NotFoundError,
   UnauthorizedError,
   InternalServerError,

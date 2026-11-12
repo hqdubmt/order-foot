@@ -1,4 +1,5 @@
 const { ErrorReponser } = require('../cors/errorReponser.cors');
+const codeCustom = require('./codeCustom.util');
 
 const errorHandlerUtils = (error, req, res, next) => {
   if (res.headersSent) {
@@ -16,15 +17,12 @@ const errorHandlerUtils = (error, req, res, next) => {
       ? normalizedError.statusCode
       : 500;
   const isServerError = status >= 500;
-  const fallbackCodes = {
-    400: 'BAD_REQUEST',
-    401: 'UNAUTHORIZED',
-    403: 'FORBIDDEN',
-    404: 'NOT_FOUND',
-    409: 'CONFLICT',
-    422: 'UNPROCESSABLE_ENTITY',
-    429: 'TOO_MANY_REQUESTS'
-  };
+  const errorDefinition = typeof normalizedError.code === 'string'
+    ? codeCustom[normalizedError.code]
+    : codeCustom.getByCode(normalizedError.code);
+  const codeDefinition = errorDefinition?.status === status
+    ? errorDefinition
+    : codeCustom.getByStatus(status) || codeCustom.INTERNAL_SERVER_ERROR;
 
   if (isServerError) {
     console.error(normalizedError);
@@ -32,12 +30,11 @@ const errorHandlerUtils = (error, req, res, next) => {
 
   return new ErrorReponser({
     status,
-    code: typeof normalizedError.code === 'string' && normalizedError.code.trim()
-      ? normalizedError.code
-      : fallbackCodes[status] || 'INTERNAL_SERVER_ERROR',
+    code: codeDefinition.code,
     message: isServerError
       ? 'Internal Server Error'
-      : normalizedError.message || 'Bad Request'
+      : normalizedError.message || codeDefinition.message,
+    description: codeDefinition.description
   }).send(res);
 };
 

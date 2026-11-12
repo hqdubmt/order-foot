@@ -1,11 +1,14 @@
 
 const statusCodesUtils = require('../utils/statusCodes.utils');
 const reasonPhrasesUtils = require('../utils/reasonPhrases.utils');
+const codeCustom = require('../utils/codeCustom.util');
 
 class SuccessResponse {
-    constructor(message, status, metadata) {
+    constructor(message, status, code, description, metadata) {
         this.message = message;
         this.status = status;
+        this.code = code;
+        this.description = description;
         this.timestamp = new Date().toISOString();
         this.metadata = metadata;
     }
@@ -19,11 +22,20 @@ class SuccessResponse {
 class Ok extends SuccessResponse {
     constructor({
         message = reasonPhrasesUtils.OK,
-        status = statusCodesUtils.OK,
+        status = codeCustom.SUCCESS.status || statusCodesUtils.OK,
+        code,
+        description,
         metadata = {},
         options = {}
     } = {}) {
-        super(message, status, metadata);
+        const definition = codeCustom.getByStatus(status);
+        super(
+            message,
+            status,
+            code ?? definition?.code ?? null,
+            description ?? definition?.description ?? null,
+            metadata
+        );
         this.options = options;
     }
 }
@@ -32,11 +44,20 @@ class Ok extends SuccessResponse {
 class Created extends SuccessResponse {
     constructor({
         message = reasonPhrasesUtils.CREATED,
-        status = statusCodesUtils.CREATED,
+        status = codeCustom.CREATED.status || statusCodesUtils.CREATED,
+        code,
+        description,
         metadata = {},
         options = {}
     } = {}) {
-        super(message, status, metadata);
+        const definition = codeCustom.getByStatus(status);
+        super(
+            message,
+            status,
+            code ?? definition?.code ?? null,
+            description ?? definition?.description ?? null,
+            metadata
+        );
         this.options = options;
     }
 }
@@ -45,11 +66,20 @@ class Created extends SuccessResponse {
 class Accepted extends SuccessResponse {
     constructor({
         message = reasonPhrasesUtils.ACCEPTED,
-        status = statusCodesUtils.ACCEPTED,
+        status = codeCustom.ACCEPTED.status || statusCodesUtils.ACCEPTED,
+        code,
+        description,
         metadata = {},
         options = {}
     } = {}) {
-        super(message, status, metadata);
+        const definition = codeCustom.getByStatus(status);
+        super(
+            message,
+            status,
+            code ?? definition?.code ?? null,
+            description ?? definition?.description ?? null,
+            metadata
+        );
         this.options = options;
     }
 }
@@ -58,9 +88,18 @@ class Accepted extends SuccessResponse {
 class NoContent extends SuccessResponse {
     constructor({
         message = reasonPhrasesUtils.NO_CONTENT,
-        status = statusCodesUtils.NO_CONTENT
+        status = codeCustom.NO_CONTENT.status || statusCodesUtils.NO_CONTENT,
+        code,
+        description
     } = {}) {
-        super(message, status, null);
+        const definition = codeCustom.getByStatus(status);
+        super(
+            message,
+            status,
+            code ?? definition?.code ?? null,
+            description ?? definition?.description ?? null,
+            null
+        );
     }
 
     send(res) {

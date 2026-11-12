@@ -20,6 +20,14 @@ test('Lấy User theo ID', async () => {
     assert.ok([200, 404].includes(response.status));
 });
 
+test('Lỗi user không tồn tại trả mã lỗi chuẩn', async () => {
+    const response = await fetch(`${server.baseUrl}/api/v1/users/not-found`);
+    const body = await response.json();
+
+    assert.equal(response.status, 404);
+    assert.equal(body.code, 404000);
+});
+
 // POST - Tạo User
 test('Tạo User mới', async () => {
     const response = await fetch(`${server.baseUrl}/api/v1/users`, {

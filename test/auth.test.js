@@ -22,7 +22,11 @@ test('Từ chối email không hợp lệ', async () => {
         }
     );
 
+    const body = await response.json();
+
     assert.equal(response.status, 400);
+    assert.equal(body.code, 400001);
+    assert.equal(body.description, 'Request validation failed');
 });
 
 test('Từ chối mật khẩu dưới 8 ký tự', async () => {

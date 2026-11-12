@@ -1,4 +1,7 @@
-const { BadRequestError } = require('../cors/reasonPhrases.cors');
+const {
+  BadRequestError,
+  ValidationError
+} = require('../cors/reasonPhrases.cors');
 
 const validateRegisterUser = (req, res, next) => {
   const body = req.body;
@@ -22,7 +25,7 @@ const validateRegisterUser = (req, res, next) => {
   }
 
   if (errors.length) {
-    return next(new BadRequestError(errors.join('; ')));
+    return next(new ValidationError(errors.join('; ')));
   }
 
   return next();

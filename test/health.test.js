@@ -12,4 +12,6 @@ test('Health API phải trả về OK', async () => {
 
     assert.equal(response.status, 200);
     assert.equal(body.status, 'OK');
+    assert.equal(body.code, 200000);
+    assert.equal(body.description, 'Request completed successfully');
 });

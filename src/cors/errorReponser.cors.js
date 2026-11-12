@@ -1,8 +1,9 @@
 class ErrorReponser {
-  constructor({ status, code, message }) {
+  constructor({ status, code, message, description }) {
     this.status = status;
     this.code = code;
     this.message = message;
+    this.description = description;
     this.timestamp = new Date().toISOString();
   }
 
