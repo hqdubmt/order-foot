@@ -61,6 +61,17 @@ class UnauthorizedError extends ErrorReasonPhrases {
   }
 }
 
+class ForbiddenError extends ErrorReasonPhrases {
+  constructor(message = reasonPhrasesUtils.FORBIDDEN, details = null) {
+    super(
+      message,
+      statusCodesUtils.FORBIDDEN,
+      'FORBIDDEN',
+      details
+    );
+  }
+}
+
 class InternalServerError extends ErrorReasonPhrases {
   constructor(message = reasonPhrasesUtils.INTERNAL_SERVER_ERROR, details = null) {
     super(
@@ -78,5 +89,6 @@ module.exports = {
   ValidationError,
   NotFoundError,
   UnauthorizedError,
+  ForbiddenError,
   InternalServerError,
 };
