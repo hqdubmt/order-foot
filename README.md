@@ -1,5 +1,10 @@
 # order-foot
 
+## API Documentation
+
+Open the Swagger UI at `/api/docs`. The raw OpenAPI specification is available
+at `/api/docs.json`.
+
 ## Middleware
 
 The shared Express middleware stack is configured in `src/middlewares/index.js`.
